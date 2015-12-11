@@ -20,9 +20,4 @@ Need a public Thread thread;
 thread = new Thread(this);
 thread.start(); <--- ADD AT THE END OF THE INIT TO START THE RUN METHOD
 
-
-
-
-
-
  */

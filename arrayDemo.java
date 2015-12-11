@@ -3,13 +3,14 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class arrayDemo extends Applet
+public class arrayDemo extends Applet implements Runnable
 {
    public Card[] deck;	
    public Card hold;
    public Table table;
    public int rand, x, y, valcount, suitcount, count, dealtCards;
    public Player[] players;
+   public Thread thread;
    
    public void init()
    {
@@ -46,6 +47,9 @@ public class arrayDemo extends Applet
              }
       }
       count = 0;
+      
+      thread = new Thread(this);
+      thread.start();
    }//init()
 
    public void paint(Graphics g)
@@ -69,16 +73,35 @@ public class arrayDemo extends Applet
       {
          for(int x=0;x<3;x++)
          {
-       table.slot[x] = deck[dealtCards];
-       dealtCards++;
-       
-       }
-
-      
-      
-      
+             table.slot[x] = deck[dealtCards];
+             dealtCards++;
+          }
+      }
+      if(period==2)
+      {
+         table.slot[3] = deck[dealtCards];
+         dealtCards++;  
+      }
+      if(period==3)
+      {
+         table.slot[4] = deck[dealtCards];
+         dealtCards++;
       }
    
    }
    
+   public void run()
+   {
+   
+   
+   
+   
+   
+   
+   //////////////////////////////
+      try {
+            thread.sleep(10);
+         }
+         catch (Exception e){ }
+   }
 }//Applet
