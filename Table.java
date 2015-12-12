@@ -10,7 +10,7 @@ public class Table
    
 
 
-   public Table(int xxPos,int yyPos)
+   public Table(int yyPos)
    {
      slot = new Card[5];
      yPos = yyPos;

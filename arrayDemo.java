@@ -8,7 +8,7 @@ public class arrayDemo extends Applet implements Runnable
    public Card[] deck;	
    public Card hold;
    public Table table;
-   public int rand, x, y, valcount, suitcount, count, dealtCards, drawCount;
+   public int rand, valcount, suitcount, count, dealtCards, drawCount;
    public boolean drawTable;
    public Player[] players;
    public Thread thread;
@@ -17,30 +17,30 @@ public class arrayDemo extends Applet implements Runnable
    {
       deck = new Card[52];	
       players = new Player[4];
-      table = new Table(100,200);
+      table = new Table(200);
    	setSize(850,600);
       drawTable = false;
-      drawCount = 2; //Set at 2 but lays down three because it adds one more right before painting
+      drawCount = 2; //Needs to be 2 or else Null Pointer; adds one more right before painting to work
       
-      for(suitcount=0;suitcount<4;suitcount=suitcount+1) //creating the cards
+      for(suitcount=0;suitcount<4;suitcount++) //creating the cards
       {
-         for(valcount=0;valcount<13;valcount=valcount+1)
+         for(valcount=0;valcount<13;valcount++)
          {
             deck[count] = new Card(suitcount,valcount,0,0,true);
             count = count+1;
          }
       }
-      for(x=0;x<52;x=x+1) //shuffling the cards
+      for(int x=0;x<52;x++) //shuffling the cards
          {
          rand = (int)(Math.random()*52);
          hold = deck[x];
          deck[x] = deck[rand];
          deck[rand] = hold;
          }
-      for(x=0;x<4;x=x+1) //giving out the cards to players
+      for(int x=0;x<4;x++) //giving out the cards to players
       {
          players[x] = new Player(x,(x*200)+100, 500);
-            for(y=0;y<4;y++)
+            for(int y=0;y<4;y++)
              {
              players[x].hand[y] = deck[dealtCards];
              dealtCards++;
@@ -60,12 +60,12 @@ public class arrayDemo extends Applet implements Runnable
    public void paint(Graphics g)
    {
     
-    for(x=0;x<4;x=x+1) //drawing players and their hands
+    for(int x=0;x<4;x++) //drawing players and their hands
       {
 
        g.fillRect(players[x].xPos,players[x].yPos,10,10);
        g.drawString(players[x].name, players[x].xPos-10, players[x].yPos+30);
-       for(y=0;y<players[x].handSize;y = y+1)
+       for(int y=0;y<players[x].handSize;y++)
             {
              g.drawString(players[x].hand[y].val + " of " + players[x].hand[y].suit, players[x].xPos-35, players[x].yPos-35-(15*y));
             }
