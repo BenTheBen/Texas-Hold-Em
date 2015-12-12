@@ -8,7 +8,7 @@ public class arrayDemo extends Applet implements Runnable
    public Card[] deck;	
    public Card hold;
    public Table table;
-   public int rand, x, y, valcount, suitcount, count, dealtCards;
+   public int rand, x, y, valcount, suitcount, count, dealtCards, drawCount;
    public boolean drawTable;
    public Player[] players;
    public Thread thread;
@@ -71,9 +71,9 @@ public class arrayDemo extends Applet implements Runnable
       }
     if(drawTable == true)
     {
-         for(int x=0;x<table.slotSize;x++)
+         for(int x=0;x<drawCount;x++)
          {
-          g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.xPos, table.yPos);
+          g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.xPos+(25*x*drawCount), table.yPos);
          }
     }
    }// paint()
@@ -83,6 +83,7 @@ public class arrayDemo extends Applet implements Runnable
       if(period==1)
       {
          drawTable = true;
+         drawCount = 3;
          for(int x=0;x<3;x++)
          {
              table.slot[x] = deck[dealtCards];
@@ -91,11 +92,13 @@ public class arrayDemo extends Applet implements Runnable
       }
       if(period==2)
       {
+         drawCount = 4;
          table.slot[3] = deck[dealtCards];
          dealtCards++;  
       }
       if(period==3)
       {
+         drawCount = 5;
          table.slot[4] = deck[dealtCards];
          dealtCards++;
       }
@@ -115,10 +118,14 @@ public class arrayDemo extends Applet implements Runnable
    {
    giveTime();
    hitTable(1);
+   repaint();
    giveTime();
    hitTable(2);
+   repaint();
    giveTime();
    hitTable(3);
+   repaint();
+
    
    
    
