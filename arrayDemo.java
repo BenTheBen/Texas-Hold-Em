@@ -9,6 +9,7 @@ public class arrayDemo extends Applet implements Runnable
    public Card hold;
    public Table table;
    public int rand, x, y, valcount, suitcount, count, dealtCards;
+   public boolean drawTable;
    public Player[] players;
    public Thread thread;
    
@@ -16,7 +17,10 @@ public class arrayDemo extends Applet implements Runnable
    {
       deck = new Card[52];	
       players = new Player[4];
+      table = new Table(100,200);
    	setSize(850,600);
+      drawTable = false;
+      
       for(suitcount=0;suitcount<4;suitcount=suitcount+1) //creating the cards
       {
          for(valcount=0;valcount<13;valcount=valcount+1)
@@ -65,12 +69,20 @@ public class arrayDemo extends Applet implements Runnable
              g.drawString(players[x].hand[y].val + " of " + players[x].hand[y].suit, players[x].xPos-35, players[x].yPos-35-(15*y));
             }
       }
+    if(drawTable == true)
+    {
+         for(int x=0;x<table.slotSize;x++)
+         {
+          g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.xPos, table.yPos);
+         }
+    }
    }// paint()
    
    public void hitTable(int period)
    {
       if(period==1)
       {
+         drawTable = true;
          for(int x=0;x<3;x++)
          {
              table.slot[x] = deck[dealtCards];
@@ -90,18 +102,28 @@ public class arrayDemo extends Applet implements Runnable
    
    }
    
-   public void run()
+   public void giveTime()
    {
    
-   
-   
-   
-   
-   
-   //////////////////////////////
-      try {
-            thread.sleep(10);
+     try {
+            thread.sleep(30);
          }
          catch (Exception e){ }
+   
+   }
+   public void run()
+   {
+   giveTime();
+   hitTable(1);
+   giveTime();
+   hitTable(2);
+   giveTime();
+   hitTable(3);
+   
+   
+   
+   
+   
+   
    }
 }//Applet

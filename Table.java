@@ -10,7 +10,7 @@ public class Table
    
 
 
-   public Table(int pSlot, int xxPos,int yyPos)
+   public Table(int xxPos,int yyPos)
    {
      slotSize = 5;
      slot = new Card[slotSize];
