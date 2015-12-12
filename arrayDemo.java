@@ -20,6 +20,7 @@ public class arrayDemo extends Applet implements Runnable
       table = new Table(100,200);
    	setSize(850,600);
       drawTable = false;
+      drawCount = 2; //Set at 2 but lays down three because it adds one more right before painting
       
       for(suitcount=0;suitcount<4;suitcount=suitcount+1) //creating the cards
       {
@@ -28,7 +29,6 @@ public class arrayDemo extends Applet implements Runnable
             deck[count] = new Card(suitcount,valcount,0,0,true);
             count = count+1;
          }
-      
       }
       for(x=0;x<52;x=x+1) //shuffling the cards
          {
@@ -37,20 +37,21 @@ public class arrayDemo extends Applet implements Runnable
          deck[x] = deck[rand];
          deck[rand] = hold;
          }
-      System.out.println("The size of the deck is  "+deck.length);
-      System.out.println();
-      count = 0;
       for(x=0;x<4;x=x+1) //giving out the cards to players
       {
          players[x] = new Player(x,(x*200)+100, 500);
             for(y=0;y<4;y++)
              {
-             players[x].hand[y] = deck[count];
-             count++;
+             players[x].hand[y] = deck[dealtCards];
              dealtCards++;
              }
       }
-      count = 0;
+      for(int x=0;x<5;x++) //giving cards to the Table
+      {
+         table.slot[x] = deck[dealtCards];
+         table.slot[x].xpos = (x*120);
+         dealtCards++;
+      }
       
       thread = new Thread(this);
       thread.start();
@@ -59,7 +60,7 @@ public class arrayDemo extends Applet implements Runnable
    public void paint(Graphics g)
    {
     
-    for(x=0;x<4;x=x+1)
+    for(x=0;x<4;x=x+1) //drawing players and their hands
       {
 
        g.fillRect(players[x].xPos,players[x].yPos,10,10);
@@ -69,68 +70,41 @@ public class arrayDemo extends Applet implements Runnable
              g.drawString(players[x].hand[y].val + " of " + players[x].hand[y].suit, players[x].xPos-35, players[x].yPos-35-(15*y));
             }
       }
-    if(drawTable == true)
+    if(drawTable == true) //drawing the table's hand, but only a few at a time (3 cards --> 4 --> 5)
     {
          for(int x=0;x<drawCount;x++)
          {
-          g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.xPos+(25*x*drawCount), table.yPos);
+          g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.slot[x].xpos + 100, table.yPos);
          }
     }
    }// paint()
    
-   public void hitTable(int period)
+   public void hitTable()
    {
-      if(period==1)
-      {
-         drawTable = true;
-         drawCount = 3;
-         for(int x=0;x<3;x++)
-         {
-             table.slot[x] = deck[dealtCards];
-             dealtCards++;
-          }
-      }
-      if(period==2)
-      {
-         drawCount = 4;
-         table.slot[3] = deck[dealtCards];
-         dealtCards++;  
-      }
-      if(period==3)
-      {
-         drawCount = 5;
-         table.slot[4] = deck[dealtCards];
-         dealtCards++;
-      }
-   
+      drawTable = true;
+      drawCount++;
+      
    }
    
-   public void giveTime()
+   public void giveTime(int length)
    {
    
      try {
-            thread.sleep(30);
+            thread.sleep(length);
          }
          catch (Exception e){ }
    
    }
    public void run()
    {
-   giveTime();
-   hitTable(1);
-   repaint();
-   giveTime();
-   hitTable(2);
-   repaint();
-   giveTime();
-   hitTable(3);
-   repaint();
-
-   
-   
-   
-   
-   
+      for(int x=0;x<3;x++)
+      {
+         giveTime(300);
+         hitTable();
+         repaint();
+         
+         
+      }
    
    }
 }//Applet

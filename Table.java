@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Table
 {
-   public int number, xPos, yPos, x, slotSize;		
+   public int number, yPos, xPos;		
    public Card[] slot;
    public boolean isAlive;
    
@@ -12,9 +12,7 @@ public class Table
 
    public Table(int xxPos,int yyPos)
    {
-     slotSize = 5;
-     slot = new Card[slotSize];
-     xPos = xxPos;
+     slot = new Card[5];
      yPos = yyPos;
      
      } // constructor
