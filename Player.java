@@ -6,7 +6,7 @@ public class Player
 {
 
    public String name, display;
-   public int number, xPos, yPos, x, handSize, totalVal;		
+   public int number, xPos, yPos, totalVal;		
    public Card[] hand;
    public boolean isAlive;
    
@@ -14,8 +14,7 @@ public class Player
 
    public Player(int playerNumber, int xxPos,int yyPos)
    {
-     handSize = 4;
-     hand = new Card[handSize];
+     hand = new Card[2];
      number = playerNumber;
      xPos = xxPos;
      yPos = yyPos;

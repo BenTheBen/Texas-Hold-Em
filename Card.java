@@ -18,9 +18,10 @@ public class Card
    public int height;
 
 
-   public Card(int pSuit, int pValue, int pXpos, int pYpos, boolean aliveYet)
+   public Card(int pSuit, int pValue, int pXpos, int pYpos)
    {
-     
+      isAlive = false;
+      
       if(pValue==0)
       {
          val = "2";
