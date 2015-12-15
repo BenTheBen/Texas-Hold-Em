@@ -97,23 +97,22 @@ public class arrayDemo extends Applet implements Runnable
    
    public void eval(int lastCard)
    {
-    if(lastCard == 2)
-     {
+    //if(lastCard == 2)
+    // {
       for(int x=0;x<4;x++)
        {
         for(int y=0;y<2;y++)
          {
-          for(int z=0;z<5;z++)
+          for(int z=0;z<drawCount;z++)
            {
             if(players[x].hand[y].val == table.slot[z].val && table.slot[z].isAlive == true)
              {
               System.out.println(players[x].name + " has a pair of " + players[x].hand[y].val + "'s.");
-              //System.out.println("PAIR");
              }
            }
          }
        }
-     }  
+     //}  
    }
    public void run()
    {
@@ -121,10 +120,8 @@ public class arrayDemo extends Applet implements Runnable
       {
          giveTime(5000);
          hitTable();
-         eval(x);
          repaint();
-         
-         
+         eval(x);
       }
    
    }
