@@ -16,12 +16,13 @@ public class Card
    public boolean isAlive;			//a boolean to denote if the hero is alive or dead.
    public int width;
    public int height;
+   public int trueVal;
 
 
    public Card(int pSuit, int pValue, int pXpos, int pYpos)
    {
       isAlive = false;
-      
+      trueVal = pValue;
       if(pValue==0)
       {
          val = "2";

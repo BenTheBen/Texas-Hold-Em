@@ -8,7 +8,7 @@ public class arrayDemo extends Applet implements Runnable
    public Card[] deck;	
    public Card hold;
    public Table table;
-   public int rand, valcount, suitcount, count, dealtCards, drawCount;
+   public int rand, valcount, suitcount, count, dealtCards, drawCount, minCount;
    public boolean drawTable;
    public Player[] players;
    public Thread thread;
@@ -30,6 +30,7 @@ public class arrayDemo extends Applet implements Runnable
             count = count+1;
          }
       }
+      count = 0;
       for(int x=0;x<52;x++) //shuffling the cards
       {
          rand = (int)(Math.random()*52);
@@ -62,7 +63,6 @@ public class arrayDemo extends Applet implements Runnable
     
       for(int x=0;x<4;x++) //drawing players and their hands
       {
-      
          g.fillRect(players[x].xPos,players[x].yPos,10,10);
          g.drawString(players[x].name, players[x].xPos-10, players[x].yPos+30);
          for(int y=0;y<2;y++)
@@ -74,19 +74,28 @@ public class arrayDemo extends Applet implements Runnable
       {
          for(int x=0;x<drawCount;x++)
          {
-            table.slot[x].isAlive = true;
             g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.slot[x].xpos + 100, table.yPos);
-            
          }
       }
    }// paint()
    
-   public void hitTable()
+   public void hitTable(int loops)
    {
       drawTable = true;
       drawCount++;
+      if(loops == 0)
+      {
+      minCount = 0;
+      }
+      if(loops == 1)
+      {
+      minCount = 3;
+      }
+      if(loops == 2)
+      {
+      minCount = 4;
+      }
    }
-   
    public void giveTime(int length)
    {
       try {
@@ -97,32 +106,49 @@ public class arrayDemo extends Applet implements Runnable
    
    public void eval(int lastCard)
    {
-    //if(lastCard == 2)
-    // {
+      
       for(int x=0;x<4;x++)
        {
         for(int y=0;y<2;y++)
          {
-          for(int z=0;z<drawCount;z++)
+          for(int z=minCount;z<drawCount;z++)
            {
-            if(players[x].hand[y].val == table.slot[z].val && table.slot[z].isAlive == true)
+            if(players[x].hand[y].val == table.slot[z].val)
              {
-              System.out.println(players[x].name + " has a pair of " + players[x].hand[y].val + "'s.");
+              players[x].pairingString[players[x].countPair] = table.slot[z].val;
+              players[x].pairingVal[players[x].countPair] = table.slot[z].trueVal;
+              players[x].countPair++;
              }
            }
          }
        }
-     //}  
+       
+   }
+   public void printEval()
+   {
+      for(int x=0;x<4;x++)
+      {
+         if(players[x].pairingString[0] != null)
+         {
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
+         }
+         if(players[x].pairingString[1] != null)
+         {
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
+         }
+       
+      }
    }
    public void run()
    {
       for(int x=0;x<3;x++)
       {
          giveTime(5000);
-         hitTable();
+         hitTable(x);
          repaint();
          eval(x);
       }
+      printEval();
    
    }
 }//Applet

@@ -5,9 +5,11 @@ import java.awt.*;
 public class Player
 {
 
-   public String name, display;
-   public int number, xPos, yPos, totalVal;		
+   public String name;
+   public int number, xPos, yPos, totalVal, countPair;		
    public Card[] hand;
+   public int[] pairingVal, tripletVal;
+   public String[] pairingString, tripletString;
    public boolean isAlive;
    
 
@@ -15,6 +17,10 @@ public class Player
    public Player(int playerNumber, int xxPos,int yyPos)
    {
      hand = new Card[2];
+     pairingVal = new int[2];
+     tripletVal = new int[2];
+     pairingString = new String[2];
+     tripletString = new String[2];
      number = playerNumber;
      xPos = xxPos;
      yPos = yyPos;
