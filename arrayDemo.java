@@ -11,6 +11,8 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    public int rand, valcount, suitcount, count, dealtCards, drawCount, minCount;
    public boolean drawTable;
    public Player[] players;
+   public Button moveOn;
+   public Image moveOnImage;
    public Thread thread;
    
    public void init()
@@ -18,6 +20,8 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       deck = new Card[52];	
       players = new Player[4];
       table = new Table(200);
+      moveOn = new Button(300,500,50,40);
+      moveOnImage = getImage(getDocumentBase(), "Proceed.png");
       setSize(850,600);
       drawTable = false;
       addKeyListener(this);
@@ -95,6 +99,7 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
          for(int x=0;x<drawCount;x++)
          {
             g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.slot[x].xpos + 100, table.yPos);
+            g.drawImage(moveOnImage, moveOn.xpos, moveOn.ypos, moveOn.width, moveOn.height, this);
          }
       }
       for(int x=0;x<4;x++)
@@ -202,7 +207,8 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    }
    public void mousePressed(MouseEvent e) 
    {
-   
+    int mouseX = e.getX();
+    int mouseY = e.getY();
    }
    public void mouseReleased(MouseEvent e) 
    {
