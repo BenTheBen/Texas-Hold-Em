@@ -19,7 +19,7 @@ public class Card
    public int trueVal;
 
 
-   public Card(int pSuit, int pValue, int pXpos, int pYpos)
+   public Card(int pSuit, int pValue)
    {
       isAlive = false;
       trueVal = pValue;

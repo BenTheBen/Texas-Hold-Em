@@ -3,7 +3,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class arrayDemo extends Applet implements Runnable
+public class arrayDemo extends Applet implements Runnable, MouseListener, KeyListener, MouseMotionListener
 {
    public Card[] deck;	
    public Card hold;
@@ -20,13 +20,16 @@ public class arrayDemo extends Applet implements Runnable
       table = new Table(200);
       setSize(850,600);
       drawTable = false;
+      addKeyListener(this);
+      addMouseListener(this);
+      addMouseMotionListener(this);
       drawCount = 2; //Don't touch it: needs to be 2 or else Null Pointer; adds one more right before painting to work
       
       for(suitcount=0;suitcount<4;suitcount++) //creating the cards
       {
          for(valcount=0;valcount<13;valcount++)
          {
-            deck[count] = new Card(suitcount,valcount,0,0);
+            deck[count] = new Card(suitcount,valcount);
             count = count+1;
          }
       }
@@ -60,10 +63,27 @@ public class arrayDemo extends Applet implements Runnable
 
    public void paint(Graphics g)
    {
-    
+      for(int x=0;x<4;x++)
+      {  //writing pairs
+         for(int y=0;y<2;y++)
+         {
+          players[x].hand[y].xpos = players[x].xPos-50;
+          players[x].hand[y].ypos = players[x].yPos-45-(15*y);
+         }
+         if(players[x].pairingString[0] != null)
+         {
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
+          g.fillRect(players[x].hand[0].xpos, players[x].hand[0].ypos, 10, 10);
+         }
+         if(players[x].pairingString[1] != null)
+         {
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
+          g.fillRect(players[x].hand[1].xpos, players[x].hand[1].ypos, 10, 10);
+         }
+       
+      }
       for(int x=0;x<4;x++) //drawing players and their hands
       {
-         g.fillRect(players[x].xPos,players[x].yPos,10,10);
          g.drawString(players[x].name, players[x].xPos-10, players[x].yPos+30);
          for(int y=0;y<2;y++)
          {
@@ -76,6 +96,13 @@ public class arrayDemo extends Applet implements Runnable
          {
             g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.slot[x].xpos + 100, table.yPos);
          }
+      }
+      for(int x=0;x<4;x++)
+      {
+       if(players[x].winner == true)
+       {
+         g.drawString(players[x].name + " wins!", 425, 300);
+       }
       }
    }// paint()
    
@@ -103,6 +130,32 @@ public class arrayDemo extends Applet implements Runnable
       }
       catch (Exception e){ }
    }
+    public void decideWinner()
+   {   
+      for(int x=0;x<4;x++)
+       {
+        players[x].totalVal = players[x].pairingVal[0] + players[x].pairingVal[1];
+        System.out.println(players[x].name + players[x].totalVal);
+       }
+       //Looping didn't work well here
+          if(players[0].totalVal >= players[1].totalVal && players[0].totalVal >= players[2].totalVal && players[0].totalVal >= players[3].totalVal && players[0].totalVal > 0)
+           {
+             players[0].winner = true;
+           }
+          if(players[1].totalVal >= players[0].totalVal && players[1].totalVal >= players[2].totalVal && players[1].totalVal >= players[3].totalVal && players[1].totalVal > 0)
+           {
+             players[1].winner = true;
+           }
+          if(players[2].totalVal >= players[0].totalVal && players[2].totalVal >= players[1].totalVal && players[2].totalVal >= players[3].totalVal && players[2].totalVal > 0)
+           {
+             players[2].winner = true;
+           }
+          if(players[3].totalVal >= players[0].totalVal && players[3].totalVal >= players[1].totalVal && players[3].totalVal >= players[2].totalVal && players[3].totalVal > 0)
+           {
+             players[3].winner = true;
+           }
+  
+   }
    
    public void eval(int lastCard)
    {
@@ -116,7 +169,7 @@ public class arrayDemo extends Applet implements Runnable
             if(players[x].hand[y].val == table.slot[z].val)
              {
               players[x].pairingString[players[x].countPair] = table.slot[z].val;
-              players[x].pairingVal[players[x].countPair] = table.slot[z].trueVal;
+              players[x].pairingVal[players[x].countPair] = table.slot[z].trueVal + 1;
               players[x].countPair++;
              }
            }
@@ -124,31 +177,65 @@ public class arrayDemo extends Applet implements Runnable
        }
        
    }
-   public void printEval()
-   {
-      for(int x=0;x<4;x++)
-      {
-         if(players[x].pairingString[0] != null)
-         {
-          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
-         }
-         if(players[x].pairingString[1] != null)
-         {
-          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
-         }
-       
-      }
-   }
+   
    public void run()
    {
       for(int x=0;x<3;x++)
       {
-         giveTime(5000);
+         giveTime(0);
          hitTable(x);
          repaint();
          eval(x);
       }
-      printEval();
+      decideWinner();
    
    }
+   
+   
+   
+      //Mouse Stuff
+   public void mouseDragged(MouseEvent e) {
+   	
+   }
+   public void mouseMoved(MouseEvent e){
+   
+   }
+   public void mousePressed(MouseEvent e) 
+   {
+   
+   }
+   public void mouseReleased(MouseEvent e) 
+   {
+   
+   }
+   public void mouseEntered(MouseEvent e) 
+   {
+   }
+   public void mouseExited(MouseEvent e) 
+   {
+   }
+   public void mouseClicked(MouseEvent e) 
+   {
+      //System.out.println("Mouse clicked (# of clicks: "+ e.getClickCount() + ")");
+      
+   }
+   public void keyPressed( KeyEvent event ) 
+   {
+      String keyin;
+      keyin = ""+event.getKeyText( event.getKeyCode()); 
+      //System.out.println("Key pressed "+keyin);
+   }//keyPressed()
+   public void keyReleased( KeyEvent event ) 
+   {
+      String keyin;
+      keyin = ""+event.getKeyText( event.getKeyCode()); 
+      //System.out.println ("Key released: "+ keyin);
+   }//keyReleased()
+   public void keyTyped( KeyEvent event ) 
+   {
+      char keyin;
+      keyin = event.getKeyChar();  
+      //System.out.println ("Key Typed: "+ keyin);
+   }//keyTyped()
+   
 }//Applet

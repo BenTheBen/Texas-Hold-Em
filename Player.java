@@ -10,12 +10,13 @@ public class Player
    public Card[] hand;
    public int[] pairingVal, tripletVal;
    public String[] pairingString, tripletString;
-   public boolean isAlive;
+   public boolean isAlive, winner;
    
 
 
    public Player(int playerNumber, int xxPos,int yyPos)
    {
+     winner = false;
      hand = new Card[2];
      pairingVal = new int[2];
      tripletVal = new int[2];
