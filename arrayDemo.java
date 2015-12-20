@@ -8,10 +8,11 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    public Card[] deck;	
    public Card hold;
    public Table table;
-   public int rand, valcount, suitcount, count, dealtCards, drawCount, minCount;
-   public boolean drawTable;
+   public int rand, valcount, suitcount, count, dealtCards, drawCount, minCount, sequence, timeCount, clickCount;
+   public boolean drawTable, showButton, running, stopping;
    public Player[] players;
    public Button moveOn;
+   public boolean[] ready;
    public Image moveOnImage;
    public Thread thread;
    
@@ -20,10 +21,12 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       deck = new Card[52];	
       players = new Player[4];
       table = new Table(200);
-      moveOn = new Button(300,500,50,40);
+      moveOn = new Button(300,500,150,40);
+      ready = new boolean[3];
       moveOnImage = getImage(getDocumentBase(), "Proceed.png");
       setSize(850,600);
       drawTable = false;
+      running = true;
       addKeyListener(this);
       addMouseListener(this);
       addMouseMotionListener(this);
@@ -69,18 +72,17 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    {
       for(int x=0;x<4;x++)
       {  //writing pairs
-         for(int y=0;y<2;y++)
-         {
-          players[x].hand[y].xpos = players[x].xPos-50;
-          players[x].hand[y].ypos = players[x].yPos-45-(15*y);
-         }
          if(players[x].pairingString[0] != null)
          {
+          players[x].hand[0].xpos = players[x].xPos-50;
+          players[x].hand[0].ypos = players[x].yPos-60;
           System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
           g.fillRect(players[x].hand[0].xpos, players[x].hand[0].ypos, 10, 10);
          }
          if(players[x].pairingString[1] != null)
          {
+          players[x].hand[1].xpos = players[x].xPos-50;
+          players[x].hand[1].ypos = players[x].yPos-35;
           System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
           g.fillRect(players[x].hand[1].xpos, players[x].hand[1].ypos, 10, 10);
          }
@@ -99,15 +101,20 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
          for(int x=0;x<drawCount;x++)
          {
             g.drawString(table.slot[x].val + " of " + table.slot[x].suit, table.slot[x].xpos + 100, table.yPos);
-            g.drawImage(moveOnImage, moveOn.xpos, moveOn.ypos, moveOn.width, moveOn.height, this);
+           
          }
       }
       for(int x=0;x<4;x++)
       {
        if(players[x].winner == true)
        {
-         g.drawString(players[x].name + " wins!", 425, 300);
+         g.drawString(players[x].name + " wins!", 425 + (100*x), 300);
        }
+       
+      }
+      if(showButton == true)
+      {
+      g.drawImage(moveOnImage, moveOn.xpos, moveOn.ypos, moveOn.width, moveOn.height, this);
       }
    }// paint()
    
@@ -130,10 +137,15 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    }
    public void giveTime(int length)
    {
+     for(int x=0; x<length; x++)
+     {
       try {
-         thread.sleep(length);
+         thread.sleep(1);
       }
       catch (Exception e){ }
+      timeCount++;
+     }
+     System.out.println("DING");
    }
     public void decideWinner()
    {   
@@ -162,7 +174,7 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
   
    }
    
-   public void eval(int lastCard)
+   public void eval()
    {
       
       for(int x=0;x<4;x++)
@@ -184,17 +196,44 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    }
    
    public void run()
-   {
-      for(int x=0;x<3;x++)
+    {
+      showButton = true;
+      while(running == true)
       {
-         giveTime(0);
-         hitTable(x);
-         repaint();
-         eval(x);
+       //giveTime(100000);
+       if(timeCount == 100000 || sequence == 0 && ready[0] == true)
+       {
+        showButton = true;
+        hitTable(sequence);
+        eval();
+        repaint();
+        ready[0] = false;
+       }
+       if(timeCount == 100000 || sequence == 1 && ready[1] == true)
+       {
+        hitTable(sequence);
+        eval();
+        repaint();
+        ready[1] = false;
+       }
+       if(timeCount == 100000 || sequence == 2 && ready[2] == true)
+       {
+        hitTable(sequence);
+        eval();
+        repaint();
+        ready[2] = false;
+        stopping = true;
+       }
+       if(stopping == true)
+       {
+        decideWinner();
+        stopping = false;
+       }
       }
-      decideWinner();
+   
    
    }
+  
    
    
    
@@ -207,8 +246,7 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    }
    public void mousePressed(MouseEvent e) 
    {
-    int mouseX = e.getX();
-    int mouseY = e.getY();
+    
    }
    public void mouseReleased(MouseEvent e) 
    {
@@ -222,8 +260,29 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    }
    public void mouseClicked(MouseEvent e) 
    {
-      //System.out.println("Mouse clicked (# of clicks: "+ e.getClickCount() + ")");
       
+     int mouseX = e.getX();
+    int mouseY = e.getY();
+    
+    if(moveOn.rec.contains(mouseX, mouseY))
+    {
+     clickCount++;
+     sequence++;
+    }
+    if(clickCount == 0)
+    {
+     ready[0] = true;
+    }
+    if(clickCount == 1)
+    {
+     ready[1] = true;
+    }
+    if(clickCount == 2)
+    {
+     ready[2] = true;
+    }
+    
+
    }
    public void keyPressed( KeyEvent event ) 
    {
