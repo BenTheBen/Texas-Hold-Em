@@ -122,15 +122,15 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    {
       drawTable = true;
       drawCount++;
-      if(loops == 0)
+      if(loops == 1)
       {
       minCount = 0;
       }
-      if(loops == 1)
+      if(loops == 2)
       {
       minCount = 3;
       }
-      if(loops == 2)
+      if(loops == 3)
       {
       minCount = 4;
       }
@@ -145,7 +145,6 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       catch (Exception e){ }
       timeCount++;
      }
-     System.out.println("DING");
    }
     public void decideWinner()
    {   
@@ -172,6 +171,10 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
              players[3].winner = true;
            }
   
+   }
+   public void test(String phrase)
+   {
+    System.out.println(phrase);
    }
    
    public void eval()
@@ -201,23 +204,26 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       while(running == true)
       {
        //giveTime(100000);
-       if(timeCount == 100000 || sequence == 0 && ready[0] == true)
+       if(sequence == 0 && ready[0] == true)
        {
+        sequence++;
         showButton = true;
         hitTable(sequence);
         eval();
         repaint();
         ready[0] = false;
        }
-       if(timeCount == 100000 || sequence == 1 && ready[1] == true)
+       if(sequence == 1 && ready[1] == true)
        {
+        sequence++;
         hitTable(sequence);
         eval();
         repaint();
         ready[1] = false;
        }
-       if(timeCount == 100000 || sequence == 2 && ready[2] == true)
+       if(sequence == 2 && ready[2] == true)
        {
+        sequence++;
         hitTable(sequence);
         eval();
         repaint();
@@ -267,17 +273,16 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
     if(moveOn.rec.contains(mouseX, mouseY))
     {
      clickCount++;
-     sequence++;
-    }
-    if(clickCount == 0)
-    {
-     ready[0] = true;
     }
     if(clickCount == 1)
     {
-     ready[1] = true;
+     ready[0] = true;
     }
     if(clickCount == 2)
+    {
+     ready[1] = true;
+    }
+    if(clickCount == 3)
     {
      ready[2] = true;
     }
