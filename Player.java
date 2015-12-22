@@ -8,7 +8,7 @@ public class Player
    public String name;
    public int number, xPos, yPos, totalVal, countPair;		
    public Card[] hand;
-   public int[] pairingVal, tripletVal;
+   public int[] pairingVal, tripletVal, yHold;
    public String[] pairingString, tripletString;
    public boolean isAlive, winner;
    

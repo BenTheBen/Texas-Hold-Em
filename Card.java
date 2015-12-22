@@ -13,10 +13,11 @@ public class Card
    public String val;	
    public int xpos;				//the x position
    public int ypos;				//the y position
-   public boolean isAlive;			//a boolean to denote if the hero is alive or dead.
+   public boolean isAlive, paired;			//a boolean to denote if the hero is alive or dead.
    public int width;
    public int height;
    public int trueVal;
+   public int yHold;
 
 
    public Card(int pSuit, int pValue)

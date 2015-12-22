@@ -21,7 +21,7 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       deck = new Card[52];	
       players = new Player[4];
       table = new Table(200);
-      moveOn = new Button(300,500,150,40);
+      moveOn = new Button(300,250,150,40);
       ready = new boolean[3];
       moveOnImage = getImage(getDocumentBase(), "Proceed.png");
       setSize(850,600);
@@ -63,7 +63,7 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
          table.slot[x].xpos = (x*120);
          dealtCards++;
       }
-      
+     
       thread = new Thread(this);
       thread.start();
    }//init()
@@ -72,20 +72,39 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    {
       for(int x=0;x<4;x++)
       {  //writing pairs
-         if(players[x].pairingString[0] != null)
+        
+         if(players[x].pairingString[0] != null && players[x].hand[0].paired == true)
          {
+          test("ding");
           players[x].hand[0].xpos = players[x].xPos-50;
-          players[x].hand[0].ypos = players[x].yPos-60;
           System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
-          g.fillRect(players[x].hand[0].xpos, players[x].hand[0].ypos, 10, 10);
+          g.fillRect(players[x].hand[0].xpos, players[x].hand[0].ypos-10, 10, 10);
          }
-         if(players[x].pairingString[1] != null)
+         
+         if(players[x].pairingString[0] != null && players[x].hand[1].paired == true)
          {
+          test("dingd");
           players[x].hand[1].xpos = players[x].xPos-50;
-          players[x].hand[1].ypos = players[x].yPos-35;
-          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
-          g.fillRect(players[x].hand[1].xpos, players[x].hand[1].ypos, 10, 10);
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[0] + "'s.");
+          g.fillRect(players[x].hand[1].xpos, players[x].hand[1].ypos-10, 10, 10);
          }
+         
+         if(players[x].pairingString[1] != null && players[x].hand[1].paired == true)
+         {
+          test("dingding");
+          players[x].hand[1].xpos = players[x].xPos-50;
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
+          g.fillRect(players[x].hand[1].xpos, players[x].hand[1].ypos-10, 10, 10);
+         }
+         
+         if(players[x].pairingString[1] != null && players[x].hand[0].paired == true)
+         {
+          test("dingdingd");
+          players[x].hand[0].xpos = players[x].xPos-50;
+          System.out.println(players[x].name + " has a pair of " + players[x].pairingString[1] + "'s.");
+          g.fillRect(players[x].hand[0].xpos, players[x].hand[0].ypos-10, 10, 10);
+         }
+         
        
       }
       for(int x=0;x<4;x++) //drawing players and their hands
@@ -93,7 +112,9 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
          g.drawString(players[x].name, players[x].xPos-10, players[x].yPos+30);
          for(int y=0;y<2;y++)
          {
-            g.drawString(players[x].hand[y].val + " of " + players[x].hand[y].suit, players[x].xPos-35, players[x].yPos-35-(15*y));
+            players[x].hand[0].ypos = players[x].yPos-80;
+            players[x].hand[1].ypos = players[x].yPos-65;
+            g.drawString(players[x].hand[y].val + " of " + players[x].hand[y].suit, players[x].xPos-35, players[x].hand[y].ypos);
          }
       }
       if(drawTable == true) //drawing the table's hand, but only a few at a time (3 cards --> 4 --> 5)
@@ -179,7 +200,6 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
    
    public void eval()
    {
-      
       for(int x=0;x<4;x++)
        {
         for(int y=0;y<2;y++)
@@ -188,6 +208,12 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
            {
             if(players[x].hand[y].val == table.slot[z].val)
              {
+              
+              players[x].hand[y].paired = true;
+              if(players[x].hand[y].paired = true)
+              {
+               test("meeeeee");
+              }
               players[x].pairingString[players[x].countPair] = table.slot[z].val;
               players[x].pairingVal[players[x].countPair] = table.slot[z].trueVal + 1;
               players[x].countPair++;
@@ -203,7 +229,6 @@ public class arrayDemo extends Applet implements Runnable, MouseListener, KeyLis
       showButton = true;
       while(running == true)
       {
-       //giveTime(100000);
        if(sequence == 0 && ready[0] == true)
        {
         sequence++;
